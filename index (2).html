@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>SBTI 趣味人格测试</title>
+  <style>
+    body { font-family: system-ui; max-width: 600px; margin: 2rem auto; padding: 0 1rem; background:#f7f7f7; }
+    .q { margin:1.5rem 0; background:white; padding:1rem; border-radius:12px; }
+    button { background:#2563eb; color:white; border:none; padding:0.8rem 2rem; border-radius:8px; cursor:pointer; }
+    #result { margin-top:2rem; padding:1.5rem; background:#fff; border-radius:12px; display:none; }
+  </style>
+</head>
+<body>
+  <h1>SBTI 抽象人格测试</h1>
+  <div id="questions"></div>
+  <button onclick="calc()">查看我的人格</button>
+  <div id="result"></div>
+
+  <script>
+    const questions = [
+      {q:"你经常精神内耗吗？",d:"E"},
+      {q:"喜欢熬夜到很晚？",d:"P"},
+      {q:"社恐多于社牛？",d:"I"},
+      {q:"做事喜欢临时决定？",d:"P"},
+      {q:"容易共情别人？",d:"F"},
+      {q:"喜欢规划好再行动？",d:"J"},
+      {q:"脑洞大，爱幻想？",d:"N"},
+      {q:"更看重现实细节？",d:"S"},
+      {q:"遇事习惯理性分析？",d:"T"},
+      {q:"独处比社交舒服？",d:"I"}
+    ];
+    const dim = {E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+    const $ = s=>document.querySelector(s);
+    const qBox = $("#questions");
+
+    questions.forEach((item,i)=>{
+      qBox.innerHTML += `
+        <div class="q">
+          <p>${i+1}. ${item.q}</p >
+          <label><input type="radio" name="q${i}" value="2" required> 很符合</label>
+          <label><input type="radio" name="q${i}" value="1"> 一般</label>
+          <label><input type="radio" name="q${i}" value="0"> 不符合</label>
+        </div>
+      `;
+    })
+
+    function calc(){
+      let e=0,i=0,s=0,n=0,t=0,f=0,j=0,p=0;
+      questions.forEach((item,idx)=>{
+        const v = Number(document.querySelector(`input[name="q${idx}"]:checked`)?.value||0);
+        if(item.d==="E")e+=v; if(item.d==="I")i+=v;
+        if(item.d==="S")s+=v; if(item.d==="N")n+=v;
+        if(item.d==="T")t+=v; if(item.d==="F")f+=v;
+        if(item.d==="J")j+=v; if(item.d==="P")p+=v;
+      })
+      const type = (e>i?"E":"I")+(s>n?"S":"N")+(t>f?"T":"F")+(j>p?"J":"P");
+      $("#result").style.display="block";
+      $("#result").innerHTML = `<h2>你的SBTI人格：${type}</h2><p>抽象指数拉满，属于互联网热门人格！</p >`;
+    }
+  </script>
+</body>
+</html>
